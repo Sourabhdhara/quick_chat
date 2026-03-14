@@ -1,0 +1,19 @@
+{
+  "8f05765d-dbf2-48e7-87c6-13333b9dae55": {
+    "type": "direct",
+    "name": "",
+    "members": [
+      "1cb7c458-ad7f-4331-a033-f926b4944f66",
+      "27135385-35e0-4280-bc80-9730df295270"
+    ],
+    "admins": [],
+    "created_at": "2026-03-14T10:16:44.598711Z",
+    "created_by": "27135385-35e0-4280-bc80-9730df295270",
+    "color": "#6c63ff",
+    "description": "",
+    "group_pic": "",
+    "hidden_for": [
+      "1cb7c458-ad7f-4331-a033-f926b4944f66"
+    ]
+  }
+}
