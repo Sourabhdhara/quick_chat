@@ -3297,6 +3297,11 @@ async function initiateCall(callType) {
         };
         localStream = await navigator.mediaDevices.getUserMedia(constraints);
 
+        // Set earpiece mode on Android
+        if (window.Android && typeof window.Android.onCallStarted === "function") {
+            window.Android.onCallStarted();
+        }
+
         // Show active call UI
         showActiveCallUI(convo ? convo.name : "Call", callType);
         localVideo.srcObject = localStream;
@@ -3447,7 +3452,7 @@ function showIncomingCallUI(data) {
     incomingLabel.textContent = data.call_type === "video" ? "Incoming video call…" : "Incoming voice call…";
     incomingCallOverlay.classList.add("visible");
 
-    // Play ring sound
+    // Play ringtone
     playCallRingtone();
 
     // Show browser notification for incoming call
@@ -3478,6 +3483,11 @@ async function acceptCall() {
             video: data.call_type === "video" ? { width: 640, height: 480 } : false
         };
         localStream = await navigator.mediaDevices.getUserMedia(constraints);
+
+        // Set earpiece mode on Android
+        if (window.Android && typeof window.Android.onCallStarted === "function") {
+            window.Android.onCallStarted();
+        }
 
         showActiveCallUI(data.caller_name, data.call_type);
         localVideo.srcObject = localStream;
@@ -3611,6 +3621,10 @@ function toggleMute() {
 function toggleSpeaker() {
     isSpeakerOn = !isSpeakerOn;
     toggleSpeakerBtn.classList.toggle("active-speaker", isSpeakerOn);
+    // Tell Android native layer to switch audio routing
+    if (window.Android && typeof window.Android.setSpeaker === "function") {
+        window.Android.setSpeaker(isSpeakerOn);
+    }
 
     const remoteStream = remoteVideo.srcObject || remoteAudio.srcObject;
     if (!remoteStream) return;
@@ -3801,6 +3815,10 @@ function cleanupCall() {
     isCameraOff = false;
     currentFacingMode = "user";
     isSpeakerOn = false;
+    // Reset Android native audio routing
+    if (window.Android && typeof window.Android.onCallEnded === "function") {
+        window.Android.onCallEnded();
+    }
     toggleMuteBtn.classList.remove("muted");
     toggleSpeakerBtn.classList.remove("active-speaker");
     toggleCameraBtn.classList.remove("muted");
